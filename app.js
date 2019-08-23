@@ -13,6 +13,9 @@ app.use(
 app.get('/', function (req, res) {
   res.send('Hello World!');
 });
+
+
+
 app.get('/usuarios', db.getUsers)
 app.get('/users/:id', db.getUserById)
 app.post('/users', db.createUser)
