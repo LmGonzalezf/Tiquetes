@@ -11,7 +11,7 @@ const pool = new Pool({
 //--------------------------------------------- GET ---------------------------
 
 //Obtener todos los tiquetes
-const getTiqutes = (request, response) => {
+const getTiquetes = (request, response) => {
   console.log("Entró")
   pool.query('SELECT * FROM tiquetes ORDER BY fecha ASC', (error, results) => {
     if (error) {
@@ -38,11 +38,12 @@ const getTiqueteById = (request, response) => {
 //Este se usa para visualizar todos los tiquetes (en forma de cliente) que están en una linea
 const getTiquetesLinea = (request, response) => {
 
-  const id_linea = parseInt(request.params.id_linea)
 
-  pool.query('SELECT * FROM tiquetes WHERE id_linea = $1', [id_linea], (error, results) => {
+  const id_linea = parseInt(request.params.id)
+
+  pool.query('SELECT * FROM linea_tiquetes WHERE id_linea = $1', [id_linea], (error, results) => {
     if (error) {
-      throw error
+      response.status(400).send('Error obteniendo los tiquetes: ' + error)
     }
     response.status(200).json(results.rows)
   })
@@ -133,20 +134,20 @@ const createTiquete = (request, response) => {
 //-------------------------------------- DELETE ------------------------------------------
 
 //Anulación de un tiquete
-const deleteUser = (request, response) => {
+const deleteTiquete = (request, response) => {
   const id = parseInt(request.params.id)
 
-  pool.query('DELETE FROM usuarios WHERE id = $1', [id], (error, results) => {
+  pool.query('DELETE FROM tiquetes WHERE id = $1', [id], (error, results) => {
     if (error) {
-      throw error
+    response.status(401).send('No se pudo anular el tiquete' + e)
     }
-    response.status(200).send(`User deleted with ID: ${id}`)
+    response.status(200).send(`Tiquete anulado correctamente ID: ${id}`)
   })
 }
 module.exports = {
-  getTiqutes,
+  getTiquetes,
   getTiqueteById,
   getTiquetesLinea,
-  deleteUser,
+  deleteTiquete,
   createTiquete   
 }

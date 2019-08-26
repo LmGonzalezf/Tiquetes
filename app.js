@@ -24,11 +24,12 @@ app.put('/users/:id', db.updateUser)
 app.delete('/users/:id', db.deleteUser)
 
 //CRUD de Tiquetes
-//app.get('/tiquetes', tickets.getUsers)
-//app.get('/tiquetes/:id', tickets.getUserById)
+app.get('/tiquetes', tickets.getTiquetes)
+app.get('/tiqueteslinea/:id', tickets.getTiquetesLinea)
+app.get('/tiquetes/:id', tickets.getTiqueteById)
 app.post('/tiquetes', tickets.createTiquete)
 //app.put('/users/:id', tickets.updateUser)
-//app.delete('/users/:id', tickets.deleteUser)
+app.delete('/tiquetes/:id', tickets.deleteTiquete)
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
