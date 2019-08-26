@@ -45,6 +45,10 @@ const getTiquetesLinea = (request, response) => {
     if (error) {
       response.status(400).send('Error obteniendo los tiquetes: ' + error)
     }
+    if(results.rows.length == 0)
+    {
+      console.log("así se compara")
+    }
     response.status(200).json(results.rows)
   })
 }
@@ -59,6 +63,7 @@ const createTiquete = (request, response) => {
   idfinal ="";
   try {
     await client.query('BEGIN')
+    console.log("Comienza la transacción")
     const values = {cedula,
       id_linea,
       fecha,
@@ -81,13 +86,24 @@ const createTiquete = (request, response) => {
   }
     console.log(valuess)
     const puestos = request.body.puestos
+    //Esta parte va a comprobar si existe un pasajero actualmente en la base de datos, si no, lo crea antes de crear el tiquete
+    const nombre = request.body.nombre
+    queryclienteget = 'SELECT * FROM clientes WHERE cedula = $1'
+    const cliente  = await client.query(queryclienteget, [cedula])
+    
+    if(cliente.rows.length == 0)
+    {
+      console.log("No hay un cliente con ese ID")
+      querycrearcliente = 'INSERT INTO clientes (cedula, nombre) VALUES ($1, $2)'
+      await client.query(querycrearcliente, [cedula, nombre])
+    }
     const queryText = 'INSERT INTO "tiquetes" (cedula, id_linea, fecha, hora, precio, origen, destino, cantidad_puestos, fecha_exp, hora_exp) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id'
     const { rows } = await client.query(queryText, valuess)
     id_ticket = rows[0].id
     idfinal = rows[0].id
     const insertPuestos = 'INSERT INTO linea_tiquetes (id_linea, id_tiquete, num_puesto) VALUES ($1 , $2 , $3)'
     for (let index = 0; index < puestos.length; index++) {
-      console.log(puestos[index])
+      
       await client.query(insertPuestos, [id_linea, id_ticket, puestos[index]])
     }
     await client.query('COMMIT')
