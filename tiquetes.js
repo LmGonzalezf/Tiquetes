@@ -2,10 +2,11 @@ const Pool = require('pg').Pool
 const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
-  database: 'Taquilla',
+  database: 'TaquiApp',
   password: 'lucho8540',
   port: 5432,
 })
+
 
 //--------------------------------------------- GET ---------------------------
 
@@ -49,33 +50,57 @@ const getTiquetesLinea = (request, response) => {
 
 //Obtener tiquetes (individualmente por puesto) por linea para ver
 //Este es el que se usa para poder visualizar los puestos ocupados y disponibles, útil para el fron
-const getTiquetesLineaPuestos = (request, response) => {
-  const id_linea = parseInt(request.params.id_linea)
-  pool.query('SELECT * FROM linea_tiquetes WHERE id_linea = $1', [id_linea], (error, results) => {
-    if (error) {
-      throw error
+const createTiquete = (request, response) => {
+(async () => {
+  // note: we don't try/catch this because if connecting throws an exception
+  // we don't need to dispose of the client (it will be undefined)
+  const client = await pool.connect()
+  idfinal ="";
+  try {
+    await client.query('BEGIN')
+    const values = {cedula,
+      id_linea,
+      fecha,
+      hora,
+      precio,
+      origen,
+      destino,
+      cantidad_puestos,
+      fecha_exp,
+      hora_exp,} = request.body
+      //values["cedula"], values["id_linea"], values["fecha"], values["hora"], values["id_linea"], values["id_linea"]
+    const valuess = []
+    for (var key in values) {
+      if (values.hasOwnProperty(key)) {
+        if(key == "puestos")
+        break;
+          valuess.push(values[key])
+          //console.log(key + " -> " + values[key]);
+      }
+  }
+    console.log(valuess)
+    const puestos = request.body.puestos
+    const queryText = 'INSERT INTO "tiquetes" (cedula, id_linea, fecha, hora, precio, origen, destino, cantidad_puestos, fecha_exp, hora_exp) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id'
+    const { rows } = await client.query(queryText, valuess)
+    id_ticket = rows[0].id
+    idfinal = rows[0].id
+    const insertPuestos = 'INSERT INTO linea_tiquetes (id_linea, id_tiquete, num_puesto) VALUES ($1 , $2 , $3)'
+    for (let index = 0; index < puestos.length; index++) {
+      console.log(puestos[index])
+      await client.query(insertPuestos, [id_linea, id_ticket, puestos[index]])
     }
-    response.status(200).json(result.rows)
-  })
+    await client.query('COMMIT')
+    response.status(201).send(`Tiquete vendido satisfactoriamente con ID: ${idfinal}`)
+  } catch (e) {
+    await client.query('ROLLBACK')
+    response.status(401).send('No se pudo completar la transacción' + e)
+  } finally {  
+    client.release()
+  } 
+})().catch(e => console.error(e.stack))
 }
-
-
-//Obtener tiquetes por fecha
-const getTiquetesFecha = (request, response) => {
-
-  const fecha = parseInt(request.params.fecha)
-
-  pool.query('SELECT * FROM tiquetes WHERE fecha = $1', [fecha], (error, results) => {
-    if (error) {
-      throw error
-    }
-    response.status(200).json(results.rows)
-  })
-}
-
-//----------------------------------- POST ----------------------------------------
-
 //Creación de un tiquete asignado a una linea
+/*
 const createTiquete = (request, response) => {
   const {
     cedula,
@@ -85,12 +110,15 @@ const createTiquete = (request, response) => {
     precio,
     origen,
     destino,
-    num_silla
+    num_silla,
+    fecha_exp,
+    hora_exp,
+
   } = request.body
 
   var puestos = request.body.puestos
 
-  pool.query('INSERT INTO usuarios (cedula,id_linea, fecha, hora, precio, origen, destino, num_silla) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [cedula, id_linea, fecha, hora], (error, results) => {
+  pool.query('INSERT INTO usuarios (cedula, id_linea, fecha, hora, precio, origen, destino, cantidad_puestos, fecha_exp, hora_exp) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)', [cedula, id_linea, fecha, hora, precio, origen, destino, cantidad_puestos, fecha_exp, hora_exp], (error, results) => {
     if (error) {
       throw error
     }
@@ -101,7 +129,7 @@ const createTiquete = (request, response) => {
     console.log(value);
   });
 }
-
+*/
 //-------------------------------------- DELETE ------------------------------------------
 
 //Anulación de un tiquete
@@ -116,9 +144,9 @@ const deleteUser = (request, response) => {
   })
 }
 module.exports = {
-  getUsers,
-  getUserById,
-  createUser,
-  updateUser,
+  getTiqutes,
+  getTiqueteById,
+  getTiquetesLinea,
   deleteUser,
+  createTiquete   
 }
