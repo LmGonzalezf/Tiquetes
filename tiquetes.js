@@ -1,20 +1,26 @@
-const Pool = require('pg').Pool
-const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'TaquiApp',
-  password: 'lucho8540',
-  port: 5432,
-})
-
-
+var db = require('./db.js');
+var pool = db.getPool();
 //--------------------------------------------- GET ---------------------------
 
 //Obtener todos los tiquetes de la tabla tiquetes
 const getTiquetes = (request, response) => {
+  console.log("Comienza transacción para obtener todos los tiquetes de la tabla tiquetes")
   pool.query('SELECT * FROM tiquetes ORDER BY fecha ASC', (error, results) => {
     if (error) {
-      throw error
+      response.status(400).send('Error obteniendo los tiquetes: ' + error)
+    }
+    response.status(200).json(results.rows)
+  })
+}
+//Obtener un tiquete por id de la tabla tiquetes
+//Este se usa para visualizar, anular y re imprimir tiquetes especificos (en forma de cliente) 
+const getTiqueteById = (request, response) => {
+  console.log("Comienza transacción para obtener todos los tiquetes por id de la tabla tiquetes")
+  const id = parseInt(request.params.id)
+
+  pool.query('SELECT * FROM tiquetes WHERE id = $1 ORDER BY fecha ASC', [id], (error, results) => {
+    if (error) {
+      response.status(400).send('Error obteniendo los tiquetes: ' + error)
     }
     response.status(200).json(results.rows)
   })
@@ -22,10 +28,10 @@ const getTiquetes = (request, response) => {
 //Obtener tiquetes en forma de cliente dada una linea de la tabla tiquetes
 //Util para obtener y anular tiquetes de una linea
 const getTiquetesLinea = (request, response) => {
-
+  console.log("Comienza transacción para obtener todos los tiquetes por linea de la tabla tiquetes")
   const id_linea = parseInt(request.params.id)
 
-  pool.query('SELECT * FROM tiquetes WHERE id_linea = $1', [id_linea], (error, results) => {
+  pool.query('SELECT * FROM tiquetes WHERE id_linea = $1 ORDER BY fecha ASC', [id_linea], (error, results) => {
     if (error) {
       response.status(400).send('Error obteniendo los tiquetes: ' + error)
     }
@@ -33,24 +39,12 @@ const getTiquetesLinea = (request, response) => {
     response.status(200).json(results.rows)
   })
 }
-//Obtener un tiquete por id de la tabla tiquetes
-//Este se usa para visualizar, anular y re imprimir tiquetes especificos (en forma de cliente) 
-const getTiqueteById = (request, response) => {
-
-  const id = parseInt(request.params.id)
-
-  pool.query('SELECT * FROM tiquetes WHERE id = $1', [id], (error, results) => {
-    if (error) {
-      throw error
-    }
-    response.status(200).json(results.rows)
-  })
-}
 //Obtener todos los tiquetes de la tabla linea_tiquetes
 const getTiquetesPuestos = (request, response) => {
-  pool.query('SELECT * FROM linea_tiquetes ORDER BY fecha ASC', (error, results) => {
+  console.log("Comienza transacción para obtener todos los tiquetes de la tabla linea_tiquetes")
+  pool.query('SELECT * FROM linea_tiquetes', (error, results) => {
     if (error) {
-      throw error
+      response.status(400).send('Error obteniendo los tiquetes: ' + error)
     }
     response.status(200).json(results.rows)
   })
@@ -58,10 +52,8 @@ const getTiquetesPuestos = (request, response) => {
 //Obtener tiquetes por linea puesto por puesto (de la tabla linea_tiquetes)
 //Util para ver los puestos actuales que están ocupados en la linea
 const getTiquetesPuestosByLinea = (request, response) => {
-
-
+  console.log("Comienza transacción para obtener todos los tiquetes por linea de la tabla linea_tiquetes")
   const id_linea = parseInt(request.params.id)
-
   pool.query('SELECT * FROM linea_tiquetes WHERE id_linea = $1', [id_linea], (error, results) => {
     if (error) {
       response.status(400).send('Error obteniendo los tiquetes: ' + error)
@@ -72,10 +64,8 @@ const getTiquetesPuestosByLinea = (request, response) => {
 }
 //Obtener tiquetes de la tabla linea_tiquetes dada un id de tiquete
 const getTiquetesPuestosByTiquete = (request, response) => {
-
-
+  console.log("Comienza transacción para obtener todos los tiquetes por tiquete de la tabla linea_tiquetes")
   const id_tiquete = parseInt(request.params.id)
-
   pool.query('SELECT * FROM linea_tiquetes WHERE id_tiquete = $1', [id_tiquete], (error, results) => {
     if (error) {
       response.status(400).send('Error obteniendo los tiquetes: ' + error)
@@ -97,7 +87,7 @@ const createTiquete = (request, response) => {
     idfinal = "";
     try {
       await client.query('BEGIN')
-      console.log("Comienza la transacción")
+      console.log("Comienza la transacción de creación de un tiquete")
       const values = {
         cedula,
         id_linea,
@@ -106,9 +96,10 @@ const createTiquete = (request, response) => {
         precio,
         origen,
         destino,
-        cantidad_puestos,
+        cantidad_sillas,
         fecha_exp,
         hora_exp,
+        vendedor
       } = request.body
       const valuess = []
       //For para meter todos los valores en un arreglo
@@ -126,13 +117,12 @@ const createTiquete = (request, response) => {
       const cliente = await client.query(queryclienteget, [cedula])
 
       if (cliente.rows.length == 0) {
-        console.log("No hay un cliente con ese ID")
         querycrearcliente = 'INSERT INTO clientes (cedula, nombre) VALUES ($1, $2)'
         await client.query(querycrearcliente, [cedula, nombre])
       }
       //Termina la creación del cliente
       //Inserta el tiquete en la tabla tiquetes
-      const queryText = 'INSERT INTO "tiquetes" (cedula, id_linea, fecha, hora, precio, origen, destino, cantidad_puestos, fecha_exp, hora_exp) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id'
+      const queryText = 'INSERT INTO "tiquetes" (cedula, id_linea, fecha, hora, precio, origen, destino, cantidad_sillas, fecha_exp, hora_exp, vendedor) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id'
       const {
         rows
       } = await client.query(queryText, valuess)
@@ -145,6 +135,8 @@ const createTiquete = (request, response) => {
 
         await client.query(insertPuestos, [id_linea, id_ticket, puestos[index]])
       }
+      //Una vez inserta los tiquetes actualiza la linea
+      await client.query('UPDATE lineas SET total = total + $1, tiquetes = tiquetes + $2 WHERE id = $3', [precio, cantidad_sillas, id_linea])
       await client.query('COMMIT')
       response.status(201).send(`Tiquete vendido satisfactoriamente con ID: ${idfinal}`)
     } catch (e) {
@@ -166,35 +158,59 @@ const updateTiquete = (request, response) => {
     idfinal = "";
     try {
       await client.query('BEGIN')
-      console.log("Comienza la transacción")
+      console.log("Comienza la transacción de actualización de un tiquete")
       const tiquete = parseInt(request.params.id)
       const bod = {
-        cedula,
         id_linea,
         fecha,
-        hora,
-        precio
+        hora
       } = request.body
-      console.log(bod)
+      var precio;
+      var puestos = request.body.puestos
       values = []
       for (var key in bod) {
+        if(key == 'puestos') {break;}
         if (bod.hasOwnProperty(key)) {
           values.push(bod[key])
         }
       }
+      //Penultimas queda id_tiquete
       values.push(tiquete)
-      console.log(values)
-
+    
+      const tiqueteActual = await client.query('SELECT * FROM tiquetes WHERE id = $1', [tiquete])
+      
+      var precioviejo = tiqueteActual.rows[0].precio;
+      var precio = tiqueteActual.rows[0].precio;
+      //Obtener información de las dos lineas
+      const lineaActual = await client.query('SELECT * FROM lineas WHERE id = $1', [tiqueteActual.rows[0].id_linea])
+      const lineaNueva = await client.query('SELECT * FROM lineas WHERE id = $1 ', [id_linea])
+      //Obtener el tipo de carro de las dos lineas
+      const tipoActual = await client.query('SELECT * FROM carros WHERE numero = $1 ', [lineaActual.rows[0].num_carro])
+      const tipoNuevo = await client.query('SELECT * FROM carros WHERE numero = $1 ', [lineaNueva.rows[0].num_carro])
+      //Comprobar la diferencia de precios
+      if (tipoActual.rows[0].tipo == 1 && tipoNuevo.rows[0].tipo == 2) {
+        //Si pasa de corriente a directa        
+        precio = tiqueteActual.rows[0].precio + (1000 * puestos.length)     
+      }
+      if (tipoActual.rows[0].tipo == 2 && tipoNuevo.rows[0].tipo == 1) {
+        //Si pasa de directa a corriente
+        precio = tiqueteActual.rows[0].precio - (1000 * puestos.length)
+      }
+      //De ultimas queda el precio
+      values.push(precio);
+      //Actualiza la linea anterior
+      await client.query('UPDATE lineas SET total = total - $1, tiquetes = tiquetes - $2 WHERE id = $3 ', [precioviejo, puestos.length, tiqueteActual.rows[0].id_linea])
+      //Actualiza la linea nueva 
+      await client.query('UPDATE lineas SET total = total + $1, tiquetes = tiquetes + $2 WHERE id = $3 ', [precio, puestos.length, id_linea])
       //Actualiza el tiquete en la tabla tiquetes
-      const queryText = 'UPDATE tiquetes SET cedula = $1, id_linea = $2, fecha = $3, hora = $4, precio = $5 WHERE id = $6 RETURNING *'
-      const {
-        rows
-      } = await client.query(queryText, values)
-      //Empieza la actualización en la tabla  
-      const actualizarPuestos = 'UPDATE linea_tiquetes SET id_linea = $1 WHERE id_tiquete = $2 RETURNING *'
+      const queryText = 'UPDATE tiquetes SET id_linea = $1, fecha = $2, hora = $3, precio = $5 WHERE id = $4 RETURNING * '
+      const rows = await client.query(queryText, values)
+      //Empieza la actualización en la tabla linea_tiquetes
+      const actualizarPuestos = 'UPDATE linea_tiquetes SET id_linea = $1 WHERE id_tiquete = $2 '
       const res = await client.query(actualizarPuestos, [id_linea, tiquete])
+      
       await client.query('COMMIT')
-      response.status(201).send(res.rows)
+      response.status(201).send(rows.rows[0])
     } catch (e) {
       await client.query('ROLLBACK')
       response.status(401).send('No se pudo completar la transacción: ' + e)
@@ -208,8 +224,8 @@ const updateTiquete = (request, response) => {
 
 //Eliminación de un tiquete
 const deleteTiquete = (request, response) => {
+  console.log("Comienza transacción para eliminar un tiquete")
   const id = parseInt(request.params.id)
-
   pool.query('DELETE FROM tiquetes WHERE id = $1', [id], (error, results) => {
     if (error) {
       response.status(401).send('No se pudo anular el tiquete' + e)

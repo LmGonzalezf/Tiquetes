@@ -1,0 +1,262 @@
+CREATE TABLE "usuarios" (
+  "id" SERIAL PRIMARY KEY ,
+  "nombre" varchar(30) NOT NULL,
+  "taquilla" int NOT NULL,
+  "contrasena" varchar(20) NOT NULL
+);
+
+CREATE TABLE "taquillas" (
+  "id" SERIAL PRIMARY KEY,
+  "nombre" varchar(20) NOT NULL
+);
+
+CREATE TABLE "rutas" (
+  "id_origen" int ,
+  "id_destino" int ,
+  "nombre" varchar(30),
+  "precio" int,
+	PRIMARY KEY (id_origen, id_destino)	
+);
+
+CREATE TABLE "tiquetes" (
+  "id" SERIAL PRIMARY KEY,
+  "cedula" int NOT NULL,
+  "id_linea" int NOT NULL,
+  "fecha_exp" date NOT NULL,
+  "hora_exp" date NOT NULL,
+  "fecha" date NOT NULL,
+  "hora" time NOT NULL,
+  "cantidad_sillas" int NOT NULL,
+  "precio" int NOT NULL,
+  "origen" int,
+  "destino" int,
+  "vendedor" int
+);
+
+CREATE TABLE "destinos" (
+  "id" int PRIMARY KEY,
+  "nombre" varchar(30)
+);
+
+CREATE TABLE "clientes" (
+  "cedula" int PRIMARY KEY,
+  "nombre" varchar(20) NOT NULL,
+  "celular" int
+);
+
+CREATE TABLE "cierres" (
+  "id" SERIAL PRIMARY KEY,
+  "totalRionegro" int,
+  "totalgomezVilla" int,
+  "usuario" int,
+  "total" int,
+  "fecha" date,
+  "hora" time
+);
+
+CREATE TABLE "remesas" (
+  "id" SERIAL PRIMARY KEY,
+  "id_linea" int NOT NULL,
+  "origen" int NOT NULL,
+  "destino" int NOT NULL,
+  "contiene" varchar(200) NOT NULL,
+  "cedula_remitente" int NOT NULL,
+  "cedula_destinatario" int NOT NULL,
+  "fecha" date NOT NULL,
+  "vendedor" int
+);
+
+CREATE TABLE "carros" (
+  "numero" int PRIMARY KEY,
+  "empresa" int NOT NULL,
+  "placa" varchar(10) NOT NULL,
+  "tipo" int NOT NULL,
+  "num_puestos" int NOT NULL,
+  "conductor" int NOT NULL
+);
+
+CREATE TABLE "tipos" (
+  "tipo" int PRIMARY KEY,
+  "nombre" varchar(20) NOT NULL
+);
+
+CREATE TABLE "lineas" (
+  "id" SERIAL PRIMARY KEY,
+  "num_carro" int NOT NULL,
+  "hora" time NOT NULL,
+  "fecha" date NOT NULL,
+  "destino" int NOT NULL,
+  "origen" int NOT NULL,
+  "estado" int NOT NULL,
+  "total" int,
+  "totalTiquetes" int
+);
+
+CREATE TABLE "estados" (
+  "id" int PRIMARY KEY,
+  "nombre" varchar(20) NOT NULL
+);
+
+CREATE TABLE "conductores" (
+  "cedula" int PRIMARY KEY,
+  "nombre" varchar(30) NOT NULL
+);
+
+CREATE TABLE "empresa" (
+  "id" int PRIMARY KEY,
+  "nombre" varchar(30) NOT NULL
+);
+
+CREATE TABLE "linea_tiquetes" (
+  "id_linea" int,
+  "id_tiquete" int,
+  "num_puesto" int,
+	UNIQUE (id_linea, num_puesto)
+);
+
+ALTER TABLE "usuarios" ADD FOREIGN KEY ("taquilla") REFERENCES "taquillas" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "rutas" ADD FOREIGN KEY ("id_origen") REFERENCES "destinos" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "rutas" ADD FOREIGN KEY ("id_destino") REFERENCES "destinos" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "tiquetes" ADD FOREIGN KEY ("cedula") REFERENCES "clientes" ("cedula") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "tiquetes" ADD FOREIGN KEY ("id_linea") REFERENCES "lineas" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "tiquetes" ADD FOREIGN KEY ("origen") REFERENCES "destinos" ("id") ;
+
+ALTER TABLE "tiquetes" ADD FOREIGN KEY ("destino") REFERENCES "destinos" ("id") ;
+
+ALTER TABLE "tiquetes" ADD FOREIGN KEY ("vendedor") REFERENCES "usuarios" ("id") ;
+
+ALTER TABLE "cierres" ADD FOREIGN KEY ("usuario") REFERENCES "usuarios" ("id");
+
+ALTER TABLE "remesas" ADD FOREIGN KEY ("id_linea") REFERENCES "lineas" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "remesas" ADD FOREIGN KEY ("origen") REFERENCES "taquillas" ("id") ;
+
+ALTER TABLE "remesas" ADD FOREIGN KEY ("destino") REFERENCES "taquillas" ("id") ;
+
+ALTER TABLE "remesas" ADD FOREIGN KEY ("cedula_remitente") REFERENCES "clientes" ("cedula");
+
+ALTER TABLE "remesas" ADD FOREIGN KEY ("cedula_destinatario") REFERENCES "clientes" ("cedula") ;
+
+ALTER TABLE "remesas" ADD FOREIGN KEY ("vendedor") REFERENCES "usuarios" ("id") ;
+
+ALTER TABLE "carros" ADD FOREIGN KEY ("empresa") REFERENCES "empresa" ("id") ON UPDATE CASCADE;
+
+ALTER TABLE "carros" ADD FOREIGN KEY ("tipo") REFERENCES "tipos" ("tipo") ON UPDATE CASCADE;
+
+ALTER TABLE "carros" ADD FOREIGN KEY ("conductor") REFERENCES "conductores" ("cedula") ON UPDATE CASCADE;
+
+ALTER TABLE "lineas" ADD FOREIGN KEY ("num_carro") REFERENCES "carros" ("numero") ON UPDATE CASCADE;
+
+ALTER TABLE "lineas" ADD FOREIGN KEY ("destino") REFERENCES "taquillas" ("id") ON UPDATE CASCADE;
+
+ALTER TABLE "lineas" ADD FOREIGN KEY ("origen") REFERENCES "taquillas" ("id") ON UPDATE CASCADE;
+
+ALTER TABLE "lineas" ADD FOREIGN KEY ("estado") REFERENCES "estados" ("id") ON UPDATE CASCADE;
+
+ALTER TABLE "linea_tiquetes" ADD FOREIGN KEY ("id_linea") REFERENCES "lineas" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "linea_tiquetes" ADD FOREIGN KEY ("id_tiquete") REFERENCES "tiquetes" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+
+
+////--------------------------------
+// Script para llenar las tablas
+
+
+INSERT INTO empresa VALUES (1, Flota Rionegro);
+INSERT INTO empresa VALUES (2, Expreso Gomez Villa);
+
+INSERT INTO taquillas VALUES (1, 'Bogotá');
+INSERT INTO taquillas VALUES (2, 'Pacho');
+INSERT INTO taquillas VALUES (3, 'Zipa');
+INSERT INTO taquillas VALUES (4, 'La Palma');
+INSERT INTO taquillas VALUES (5, 'Yacopi');
+INSERT INTO taquillas VALUES (6, 'Topaipi');
+INSERT INTO taquillas VALUES (7, 'Pasuncha');
+INSERT INTO taquillas VALUES (8, 'San Antonio');
+INSERT INTO taquillas VALUES (9, 'Guacamayas');
+
+
+INSERT INTO usuarios VALUES (1, 'Usuario 1');
+INSERT INTO usuarios VALUES (2, 'Usuario 2');
+INSERT INTO usuarios VALUES (3, 'Usuario 3');
+INSERT INTO usuarios VALUES (4, 'Usuario 4');
+INSERT INTO usuarios VALUES (5, 'Usuario 5');
+INSERT INTO usuarios VALUES (6, 'Usuario 6');
+INSERT INTO usuarios VALUES (7, 'Usuario 7');
+INSERT INTO usuarios VALUES (8, 'Usuario 8');
+INSERT INTO usuarios VALUES (9, 'Usuario 9');
+
+INSERT INTO tipos VALUES (1, 'Corriente');
+INSERT INTO tipos VALUES (2, 'Directa');
+
+INSERT INTO clientes VALUES (1, 'Cliente 1', 123456789);
+INSERT INTO clientes VALUES (2, 'Cliente 2', 123456789);
+INSERT INTO clientes VALUES (3, 'Cliente 3', 123456789);
+INSERT INTO clientes VALUES (4, 'Cliente 4', 123456789);
+INSERT INTO clientes VALUES (5, 'Cliente 5', 123456789);
+INSERT INTO clientes VALUES (6, 'Cliente 6', 123456789);
+INSERT INTO clientes VALUES (7, 'Cliente 7', 123456789);
+INSERT INTO clientes VALUES (8, 'Cliente 8', 123456789);
+INSERT INTO clientes VALUES (9, 'Cliente 9', 123456789);
+
+INSERT INTO conductores VALUES (1, 'Conductor 1');
+INSERT INTO conductores VALUES (2, 'Conductor 2');
+INSERT INTO conductores VALUES (3, 'Conductor 3');
+INSERT INTO conductores VALUES (4, 'Conductor 4');
+INSERT INTO conductores VALUES (5, 'Conductor 5');
+INSERT INTO conductores VALUES (6, 'Conductor 6');
+INSERT INTO conductores VALUES (7, 'Conductor 7');
+INSERT INTO conductores VALUES (8, 'Conductor 8');
+INSERT INTO conductores VALUES (9, 'Conductor 9');
+INSERT INTO conductores VALUES (10, 'Conductor 10');
+
+INSERT INTO carros VALUES (2001, 2, 'AAA111', 1, 34, 1);
+INSERT INTO carros VALUES (2002, 2, 'AAA112', 1, 34, 2);
+INSERT INTO carros VALUES (2003, 2, 'AAA113', 1, 43, 3);
+INSERT INTO carros VALUES (2004, 2, 'AAA114', 2, 19, 4);
+INSERT INTO carros VALUES (2005, 2, 'AAA115', 2, 19, 5);
+INSERT INTO carros VALUES (1001, 1, 'AAA116', 1, 32, 6);
+INSERT INTO carros VALUES (1002, 1, 'AAA117', 1, 24, 7);
+INSERT INTO carros VALUES (1003, 1, 'AAA118', 1, 24, 8);
+INSERT INTO carros VALUES (1004, 1, 'AAA119', 2, 19, 9);
+INSERT INTO carros VALUES (1005, 1, 'AAA1110', 2, 19, 10);
+
+INSERT INTO destinos VALUES (1, 'Bogotá');
+INSERT INTO destinos VALUES (2, 'Pacho');
+INSERT INTO destinos VALUES (3, 'Zipa');
+INSERT INTO destinos VALUES (4, 'La Palma');
+INSERT INTO destinos VALUES (5, 'Yacopi');
+INSERT INTO destinos VALUES (6, 'Topaipi');
+INSERT INTO destinos VALUES (7, 'Pasuncha');
+INSERT INTO destinos VALUES (8, 'San Antonio');
+INSERT INTO destinos VALUES (9, 'Guacamayas');
+INSERT INTO destinos VALUES (10, 'Chía');
+INSERT INTO destinos VALUES (11, 'Cajicá');
+INSERT INTO destinos VALUES (12, 'Talauta');
+INSERT INTO destinos VALUES (13, 'San Antonio');
+
+INSERT INTO estados VALUES (1, 'Despachado');
+INSERT INTO estados VALUES (2, 'En Espera');
+INSERT INTO estados VALUES (3, 'Anulado');
+
+INSERT INTO rutas VALUES (2, 3, '23 / Pacho-Zipa', 11000);
+INSERT INTO rutas VALUES (2, 10, '210 / Pacho-Chía', 15000);
+INSERT INTO rutas VALUES (2, 11, '211 / Pacho-Cajicá', 14000);
+INSERT INTO rutas VALUES (2, 1, '21 / Pacho-Bogotá', 16000);
+INSERT INTO rutas VALUES (1, 3, '13 / Bogotá-Zipa', 6000);
+INSERT INTO rutas VALUES (1, 10, '110 / Bogotá-Chía', 4000);
+INSERT INTO rutas VALUES (1, 11, '13 / Bogotá-Cajicá', 5000);
+INSERT INTO rutas VALUES (1, 2, '12 / Bogotá-Pacho', 16000);
+
+
+
+
+
+
