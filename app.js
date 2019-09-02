@@ -79,7 +79,25 @@ app.delete('/lineas/:id', lineas.deleteLinea)
 
 
 //-------------------------------------------------- CRUD de Remesas ---------------------------------------------------
+/*
+//Obtener todas las remesas 
+app.get('/remesas', remesas.getRemesas)
 
+//Obtener las remesas dado un id de remesa
+app.get('/remesas/:id', remesas.getRemesasById)
+
+//Obtener las remesas dado un id de linea
+app.get('/remesaslinea/:id', remesas.getRemesasLinea)
+
+//Creación de una remesa
+app.post('/remesas', remesas.createRemesa)
+
+//Actualización de una remesa
+app.put('/remesas/:id', remesas.updateRemesa)
+
+//Anulación de una remesa
+app.delete('/remesas/:id', remesas.deleteRemesa)
+*/
 //-------------------------------------------------CRUD de Cierres ----------------------------------------------------
 
 //-----------------------------------------------------------------------------------------------
