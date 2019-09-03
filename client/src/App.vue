@@ -1,25 +1,34 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
+    <div v-show="this.$store.state.login" id="nav">
       <router-link to="/about">About</router-link> |
       <router-link to="/ventas">Ventas</router-link> |
       <router-link to="/despachos">Despachos</router-link> |
       <router-link to="/cierres">Cierres</router-link> |
       <router-link to="/consultas">Consultas</router-link> |
-      <router-link to="/remesas">Remesas</router-link>
+      <router-link to="/remesas">Remesas</router-link> |
+      <router-link to="/Home">Home</router-link>
     </div>
     <router-view/>
   </div>
 </template>
 
-<style>
+
+<script>
+export default {
+  
+}
+</script>
+<style lang="scss">
+  @import './assets/scss/variables.scss';
+  @import './node_modules/bootstrap/scss/bootstrap.scss';
+  @import './assets/scss/form.scss';
+  @import './assets/scss/main.scss';
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
 }
 #nav {
   padding: 30px;

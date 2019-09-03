@@ -1,4 +1,5 @@
-const pool = require('./db') 
+var db = require('./db.js');
+var pool = db.getPool();
 
 const getUsers = (request, response) => {
   console.log("Entró")
@@ -62,10 +63,50 @@ const deleteUser = (request, response) => {
     response.status(200).send(`User deleted with ID: ${id}`)
   })
 }
+/*
+const getDestinos = (request, response) => {
+  console.log("entró a destinos")
+  pool.query('select array_to_json(array_agg(row_to_json(t))) from ( select * from destinos) t'), (error, results) => {
+    if (error)
+    {
+      console.log("caremonda error: " + error)
+      response.status(400).send('Error obteniendo destinos: ' + error)
+    }
+    console.log("caremonda: ")
+    response.status(200).send(results)
+  }
+}
+*/
+const getDestinos = (request, response) => {
+  console.log("Entró a destinos")
+  pool.query('select array_to_json(array_agg(row_to_json(t))) from ( select * from destinos) t', (error, results) => {
+    if (error) {
+      console.log("caremonda error: " + error)
+      response.status(400).send('Error obteniendo destinos: ' + error)
+    }
+    console.log("caremonda: " + results.rows)
+    response.status(200).send(results.rows[0].array_to_json)
+  })
+}
+
+const login = (request, response) => {
+  console.log("Entró: " + request.body.id + request.body.pass)
+  pool.query('SELECT * FROM usuarios WHERE id = $1 AND contrasena = $2', [request.body.id, request.body.pass], (error, results) => {  
+    if(results.rows.length == 0){
+      response.status(401).send('Usuario o Contraseña Incorrecta')
+    }
+    else{
+      response.status(200).send('Login Correcto')
+    }
+  })
+  
+}
 module.exports = {
   getUsers,
   getUserById,
   createUser,
   updateUser,
   deleteUser,
+  getDestinos,
+  login
 }
