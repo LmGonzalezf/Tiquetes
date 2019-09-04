@@ -11,14 +11,71 @@
     max-height: 100px;
   }
 }
+#tableLineas {
+	margin: 4% ;
+	width: 80%;
+	
+	.input-group-text {
+		padding: 0 .5em 0 .5em;
+		
+		.fa {
+			font-size: 12px;
+		}
+	}
+}
+.containerGigante{
+  margin-top: 4%;
+  margin-bottom: 5%;
+}
+.nav-tabs .nav-link.active {
+  background-color: rgb(90, 209, 34);
+}
+#nav {
+  background-color: rgb(78, 148, 57);
+}
 
+.labelTiquetes{
+  margin-left: 4%;
+  margin-top: 3%;
+}
+
+#valorTotal  {
+  margin-top: 4%;
+}
+.containerTabla{
+  margin-left: 3%;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgba(0, 0, 0, 0.37);
+  border-radius: 10px;
+  max-width: 80%;
+}
+.inputTiquete {
+  margin-top: 3%;
+  margin-left: 5%;
+}
+.headertablalineas{
+  background-color: rgb(67, 143, 73);
+}
+
+.tablalineas{
+    border-collapse: collapse;
+}
+
+.formV{
+  margin-bottom: 5%;
+}
 .containerformV{
   max-width: 80%;
   padding-top: 2%;
   align-items: stretch;
   border-style: solid;
+  border-width: 1px;
+  border-color: rgba(0, 0, 0, 0.37);
+  border-radius: 10px;
   margin-left: 4%;
   margin-top: 3%;
+  
 }
 .wrapper-box__title {
   color: $text-color;

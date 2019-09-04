@@ -1,13 +1,14 @@
 <template>
-  <div id="app">
+  <div v-show="this.$store.state.login" id="app">
     <div v-show="this.$store.state.login" id="nav">
-      <router-link to="/about">About</router-link> |
-      <router-link to="/ventas">Ventas</router-link> |
-      <router-link to="/despachos">Despachos</router-link> |
-      <router-link to="/cierres">Cierres</router-link> |
-      <router-link to="/consultas">Consultas</router-link> |
-      <router-link to="/remesas">Remesas</router-link> |
-      <router-link to="/Home">Home</router-link>
+      <b-nav tabs>
+      <b-nav-item :active='$route.name =="ventas"' to="/ventas">Ventas</b-nav-item>
+      <b-nav-item :active='$route.name =="despachos"' to="/despachos">Despachos</b-nav-item>
+      <b-nav-item :active='$route.name =="cierres"' to="/cierres">Cierres</b-nav-item>
+      <b-nav-item :active='$route.name =="consultas"' to="/consultas">Consultas</b-nav-item>
+      <b-nav-item :active='$route.name =="remesas"' to="/remesas">Remesas</b-nav-item>
+      </b-nav>
+      
     </div>
     <router-view/>
   </div>
@@ -31,7 +32,7 @@ export default {
   text-align: center;
 }
 #nav {
-  padding: 30px;
+  padding: 4px;
 }
 
 #nav a {
@@ -40,6 +41,6 @@ export default {
 }
 
 #nav a.router-link-exact-active {
-  color: #42b983;
+  color: #ffffff;
 }
 </style>

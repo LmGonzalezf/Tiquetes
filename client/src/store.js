@@ -6,7 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    login: false,
+    login: true,
     loadingStatus: 'notLoading',
     taquilla: '',
     destinos:[],
@@ -42,7 +42,7 @@ export default new Vuex.Store({
       commit('SET_TAQUILLA', payload.taquilla)
       commit('SET_USUARIO', payload.usuario)
       commit('SET_LOGIN')
-      console.log(this.state.destinos)
+      console.log(this.state.destinos[0].id)
     },
   }
 })
