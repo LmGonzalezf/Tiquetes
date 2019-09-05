@@ -23,6 +23,23 @@
 		}
 	}
 }
+.btnPuesto {
+  margin-left: 15px;
+  background-color: rgb(43, 194, 56);
+}
+.btnPuesto:disabled{
+  background-color: #ad5454;
+}
+.btnPuesto:hover{
+  background-color: rgb(32, 43, 43);
+}
+.btnPuesto:active{
+  background-color: cadetblue;
+}
+.btnPuesto:focus{
+  background-color: burlywood;
+}
+
 .containerGigante{
   margin-top: 4%;
   margin-bottom: 5%;

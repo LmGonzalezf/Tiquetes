@@ -9,7 +9,10 @@ const getTiquetes = (request, response) => {
     if (error) {
       response.status(400).send('Error obteniendo los tiquetes: ' + error)
     }
-    response.status(200).json(results.rows)
+    if(results != undefined)
+      response.status(200).json(results.rows)
+    else
+      response.status(200).send(results)
   })
 }
 //Obtener un tiquete por id de la tabla tiquetes
@@ -22,7 +25,10 @@ const getTiqueteById = (request, response) => {
     if (error) {
       response.status(400).send('Error obteniendo los tiquetes: ' + error)
     }
-    response.status(200).json(results.rows)
+    if(results != undefined)
+      response.status(200).json(results.rows)
+    else
+      response.status(200).send(results)
   })
 }
 //Obtener tiquetes en forma de cliente dada una linea de la tabla tiquetes
@@ -35,8 +41,10 @@ const getTiquetesLinea = (request, response) => {
     if (error) {
       response.status(400).send('Error obteniendo los tiquetes: ' + error)
     }
-
-    response.status(200).json(results.rows)
+    if(results != undefined)
+      response.status(200).json(results.rows)
+    else
+      response.status(200).send(results)
   })
 }
 //Obtener todos los tiquetes de la tabla linea_tiquetes
@@ -46,7 +54,10 @@ const getTiquetesPuestos = (request, response) => {
     if (error) {
       response.status(400).send('Error obteniendo los tiquetes: ' + error)
     }
-    response.status(200).json(results.rows)
+    if(results != undefined)
+      response.status(200).json(results.rows)
+    else
+      response.status(200).send(results)
   })
 }
 //Obtener tiquetes por linea puesto por puesto (de la tabla linea_tiquetes)
@@ -59,7 +70,10 @@ const getTiquetesPuestosByLinea = (request, response) => {
       response.status(400).send('Error obteniendo los tiquetes: ' + error)
     }
 
-    response.status(200).json(results.rows)
+    if(results != undefined)
+      response.status(200).json(results.rows)
+    else
+      response.status(200).send(results)
   })
 }
 //Obtener tiquetes de la tabla linea_tiquetes dada un id de tiquete
@@ -71,10 +85,28 @@ const getTiquetesPuestosByTiquete = (request, response) => {
       response.status(400).send('Error obteniendo los tiquetes: ' + error)
     }
 
-    response.status(200).json(results.rows)
+    if(results != undefined)
+      response.status(200).json(results.rows)
+    else
+      response.status(200).send(results)
   })
 }
 
+ //Obtener los puestos ocupados en forma de arreglo de json
+ const getPuestosByLinea = (request, response) => {
+  const linea = request.params.linea
+  console.log("Entró a puestosbylinea")
+  pool.query('select array_to_json(array_agg(row_to_json(t))) from ( select num_puesto from linea_tiquetes where id_linea = $1) t', [linea], (error, results) => {
+    if (error) {
+      console.log(error)
+      response.status(400).send('Error obteniendo destinos: ' + error)
+    }
+    if(results != undefined)
+      response.status(200).send(results.rows[0].array_to_json)
+    else
+      response.status(200).send(results)
+  })
+ }
 
 //----------------------------- POST -------------------------------------------------------
 
@@ -242,5 +274,6 @@ module.exports = {
   getTiquetesPuestos,
   deleteTiquete,
   createTiquete,
-  updateTiquete
+  updateTiquete,
+  getPuestosByLinea
 }

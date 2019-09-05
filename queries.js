@@ -7,7 +7,10 @@ const getUsers = (request, response) => {
     if (error) {
       throw error
     }
-    response.status(200).json(results.rows)
+    if(results != undefined)
+      response.status(200).json(results.rows)
+    else
+      response.status(200).send(results)
   })
 }
 
@@ -19,7 +22,10 @@ const getUserById = (request, response) => {
     if (error) {
       throw error
     }
-    response.status(200).json(results.rows)
+    if(results != undefined)
+      response.status(200).json(results.rows)
+      else
+      response.status(200).send(results)
   })
 }
 const createUser = (request, response) => {
@@ -85,7 +91,10 @@ const getDestinos = (request, response) => {
       response.status(400).send('Error obteniendo destinos: ' + error)
     }
     console.log("caremonda: " + results.rows)
-    response.status(200).send(results.rows[0].array_to_json)
+    if(results != undefined)
+      response.status(200).send(results.rows[0].array_to_json)
+    else 
+      response.status(200).send(response)
   })
 }
 
@@ -101,6 +110,21 @@ const login = (request, response) => {
   })
   
 }
+
+const getCarroById = (request, response) => {
+  const carro = request.params.carro
+  console.log("Entró a carrosbyid")
+  pool.query('select array_to_json(array_agg(row_to_json(t))) from ( select * from carros where numero = $1) t', [carro], (error, results) => {
+    if (error) {
+      console.log(error)
+      response.status(400).send('Error obteniendo destinos: ' + error)
+    }
+    if(results != undefined)
+      response.status(200).send(results.rows[0].array_to_json)
+    else
+      response.status(200).send(results)
+  })
+}
 module.exports = {
   getUsers,
   getUserById,
@@ -108,5 +132,6 @@ module.exports = {
   updateUser,
   deleteUser,
   getDestinos,
-  login
+  login,
+  getCarroById
 }

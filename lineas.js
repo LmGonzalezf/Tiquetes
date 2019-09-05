@@ -2,6 +2,22 @@ var db = require('./db.js');
 var pool = db.getPool();
 //--------------------------------------------- GET ---------------------------
 
+//Obtener todas las lineas venta
+const getLineasVenta = (request, response) => {
+    const origen = request.params.origen
+    const destino = request.params.destino
+    console.log("Comienza transacción para obtener todas las lineas venta")
+    pool.query('select array_to_json(array_agg(row_to_json(t))) from ( select * from lineas where origen = $1 and destino = $2) t',[origen, destino] ,(error, results) => {
+        if (error) {
+            response.status(400).send('Error obteniendo los tiquetes: ' + error)
+        }
+        if(results != undefined)
+            response.status(200).json(results.rows[0].array_to_json)
+        else
+            response.status(200).send(results)
+    })
+}
+
 //Obtener todas las lineas
 const getLineas = (request, response) => {
     console.log("Comienza transacción para obtener todas las lineas")
@@ -9,7 +25,10 @@ const getLineas = (request, response) => {
         if (error) {
             response.status(400).send('Error obteniendo los tiquetes: ' + error)
         }
-        response.status(200).json(results.rows)
+        if(results != undefined)
+            response.status(200).json(results.rows)
+        else
+            response.status(200).send(results)
     })
 }
 //Obtener todas las lineas dada una fecha 
@@ -21,7 +40,10 @@ const getLineasByFecha = (request, response) => {
         if (error) {
             response.status(400).send('Error obteniendo los tiquetes: ' + error)
         }
-        response.status(200).json(results.rows)
+        if(results != undefined)
+            response.status(200).json(results.rows)
+        else
+            response.status(200).send(results)
     })
 }
 //Obtener todas las lineas dado un carro
@@ -32,7 +54,10 @@ const getLineasByCarro = (request, response) => {
         if (error) {
             response.status(400).send('Error obteniendo los tiquetes: ' + error)
         }
-        response.status(200).json(results.rows)
+        if(results != undefined)
+            response.status(200).json(results.rows)
+        else
+            response.status(200).send(results)
     })
 }
 //Obtener todas las lineas dada una fecha y un carro
@@ -44,7 +69,10 @@ const getLineasByFechaCarro = (request, response) => {
         if (error) {
             response.status(400).send('Error obteniendo los tiquetes: ' + error)
         }
-        response.status(200).json(results.rows)
+        if(results != undefined)
+            response.status(200).json(results.rows)
+        else
+            response.status(200).send(results)
     })
 }
 
@@ -72,7 +100,7 @@ const createLinea = (request, response) => {
         if (error) {
             response.status(400).send('Error creando linea: ' + error)
         } //`Linea creada con ID: ${results.rows[0].id}`
-        response.status(201).send(results.rows[0])
+        response.status(201).send(results.rows)
     })
 }
 
@@ -116,6 +144,7 @@ const deleteLinea = (request, response) => {
 }
 
 module.exports = {
+    getLineasVenta,
     getLineasByFecha,
     getLineas,
     getLineasByCarro,

@@ -30,6 +30,8 @@ app.delete('/users/:id', db.deleteUser)
 
 //CRUD de DESTINOS
 app.get('/destinos', db.getDestinos)
+//CRUD de CARROS
+app.get('/carros/:carro', db.getCarroById)
 
 //----------------------------------------------CRUD de Tiquetes --------------------------------------------------
 //Obtener todos los tiquetes de la tabla tiquetes
@@ -59,8 +61,12 @@ app.put('/tiquetes/:id', tickets.updateTiquete)
 //Anulación de un tiquete
 app.delete('/tiquetes/:id', tickets.deleteTiquete)
 
-
+//Obtener los puestos vendidos de una linea
+app.get('/puestosLinea/:linea', tickets.getPuestosByLinea)
 //--------------------------------------------------- CRUD de Lineas ----------------------------------------------
+
+//Obtener todas las lineas para view venta tiquetes
+app.get('/lineasVentas/:origen&:destino', lineas.getLineasVenta)
 //Obtener todas las lineas 
 app.get('/lineas', lineas.getLineas)
 

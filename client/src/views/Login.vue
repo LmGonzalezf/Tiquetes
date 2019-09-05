@@ -17,7 +17,7 @@
             </div>
             <div class="form-group">
               <label for="inputTaquilla">Taquilla</label>
-              <input v-model="input.taquila" @focus="clearError()" @keyup.enter="login" id="inputTaquilla" type="text" name="taquilla" class="form-control" placeholder="Taquilla">
+              <input v-model="input.taquilla" @focus="clearError()" @keyup.enter="login" id="inputTaquilla" type="text" name="taquilla" class="form-control" placeholder="Taquilla">
             </div>
             <input type="button" v-on:click="login()" class="btn btn-default" id="submitLogin" value="Entrar">
             <transition name="fade">
@@ -51,7 +51,8 @@
     methods: {
       async login() {
         if(this.input.username != "" && this.input.password != "") {
-            var payload = {'usuario': this.input.username, 'taquilla': this.input.username}
+            var payload = {'usuario': this.input.username, 'taquilla': this.input.taquilla}
+            console.log(payload.taquilla)
             var statuscod = 2;
             await this.$http.post('http://localhost:3000/login',{
                 id: this.input.username,
@@ -67,7 +68,7 @@
             });
             
           if(statuscod == 1){
-              this.$store.dispatch('login', payload )
+              await this.$store.dispatch('login', payload )
               this.$router.push({ name: "ventas" });
           } else {
             this.error = 'E-mail or password incorrect'
