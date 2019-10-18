@@ -9,7 +9,7 @@ export default new Vuex.Store({
     login: true,
     loadingStatus: 'notLoading',
     taquilla: '',
-    destinos:[],
+    destinos:[''],
     usuario:'',
     idsDestinos: [],
     stringDestinos: [],
@@ -46,7 +46,7 @@ export default new Vuex.Store({
             .then(function (response) {
               var stringsDestino = []
               var idsDestino = []
-              var preDestinos =[]
+              var preDestinos =['']
               for (let index = 0; index < response.data.length; index++) { 
                 stringsDestino.push(''+response.data[index].id + ' - ' + response.data[index].nombre)
                 idsDestino.push(response.data[index].id)

@@ -1,0 +1,93 @@
+Opciones para ventana tiquetes
+
+1. Version antigua, escoger destino y basado en ese destino poner todas las rutas que pasan por ese destino
+- Al cabmiar de destino se reinicia la tabla por lo que hay que volver a seleccionar la linea
+-Facilidad de visualización de las lineas porque solo se muestran las lineas que sirven 
+
+2. Version actual, la tabla muestra todas las lineas y se selecciona una y basada en esa seleccion se muestran al escoger el destino solo los 
+que pasen por ahi
+-Facilidad al vender tiquetes porque al cambiar de destino no se reinicia la tabla por lo que no hay que volver a seleccionar la tabla
+-El  problema es que la tabla muestra todas las lineas por lo que no es facil ver la linea
+
+3. Otra version basada en la 1, solo que más complicada, lo que cambia es que al cambiar de destino se comprueba si la tabla cambia o si sirven
+las mismas lineas que el anterior para el nuevo destino, evita que se tenga que seleccionar de nuevo una linea cada vez que se cambia un destino 
+(solo si para el destino sirven las mismas lineas que el anterior)
+
+4. Otra version basada en la 2, pero con más filtros, de manera que se pueden obtener lineas más facil, se puede filtrar por destino, por carro, 
+ordenar por hora, y demás filtros que faciliten la visualización de las lineas
+
+5. Otra versión, implementar las dos y añadir un seleccionador de modo (meh).
+
+6. Otra version, implementar una tabla que muestro todos las lineas y un seleccionador de destino que permita filtrar las lineas (de manera viisual
+en la tabla, no filtrar haciendo un SQL), y en
+la ventana del tiquete poder cambiar el destino  del tiquete (que quedaria prefijado por el destino, esto con el fin de evitar tener que seleccionar la linea
+otra vez si el destino nuevo sirve para la linea actual).
+
+La segunda versión es util para cuando se están vendiendo tiquetes de diferentes destinos que no comparten ruta, pero es mala 
+
+
+Esquema para rutas/destinos
+
+Problema: Dado un origen y un destino tener en cuenta todos los posibles puntos entre esos dos destinos
+Soluciones: 
+1. Grafo
+Tabla destinos (donde se guardan todos los destinos)
+Tabla rutas (donde se guardan las rutas para tener los valores pre definidos de precio y demás)
+Tabla conjuntos (donde se guardan las rutas que sirven entre terminales, columnas: origen, destino
+
+Opción escogida: Se va a tener una tabla con todas las lineas, pero en esta tabla se va a poder filtrar por carro, destino, origen, 
+ordenar por cualquier columna (aunque de preferencia va a ser ordenada por hora) 
+
+
+//// Actualización 15/10/2019
+
+Se podrán robar los datos de la DB actual?
+
+Lo mas posible es que se vaya a usar el esquema de tener todas las lineas y luego filtrar dado un carro, destino, origen, y demás, luego en la parte
+del tiquete se va a poder cambiar el destino que por defecto será el destino seleccionado arriba (en la parte de lineas), pero se puede cambiar a subdestinos de la linea seleccionada, para no tener que actualizar la tabla de lineas cada vez que se cambie de destino y sirva la misma linea (ejemplo ventas linea pacho-bogotá)
+
+Idea adicional: Doc en firebase para las rutas que tenga por llave el origen y dentro tenga otros documentos con llave el destino y dentro de esos documentos los posibles destinos que cubre esa ruta y el precio entonces cuando se seleccione un origen los destinos posibles en la parte de lineas van a ser todos los elementos de todos los subdocumentos con llaves destinos, sin repetirse puesto que hay destinos que pueden cubrir diferentes rutas, esto despliega en la tabla de lineas todas las lineas que pasen o tengan como destino ese destino, se selecciona la linea, y los posibles destinos tiquete serán todos los elementos del subdocumento que tengan como llave el destino de la linea seleccionada.
+(Ya está hecho un avance en DOCS)
+
+El origen predeterminado va a ser la taquilla del usuario, no va a haber destino predeterminado (esto con el fin de que aparezcan todas las lineas
+al abrir por primera vez), luego ese destino podrá ser modificado con la idea adicional. 
+
+Al seleccionar ese destino se va a mirar todas las llaves donde esté ese destino para traer las lineas que pasen por ahi, sin embargo al seleccionar la linea
+se va a poder seleccionar un destino diferente (en la parte de tiquete, para evitar tener que actualizar la lista de lineas cada vez que se quiera cambiar
+el destino y sirva la misma linea)
+
+Igual para los precios, se va a tener una tabla con columna origen destino que tenga el valor del tiquete, esta es una manera eficiente de consultar de
+manera rapida el precio de una ruta exacta, y dado este modificarlo para estudiante sin tener que tener otro tipo de destino. 
+(Falta hacerla)
+
+Mirar si es mejor cargar los datos de Firebase al principio y desde ahí hacer las consultas a vuex.store o consultarlos cada vez en Firebase.
+
+
+17/10/2019 ////////////////////////////////////////////
+
+Falta por terminar la ventana de ventas, despachos, cierres, consultas, remesas
+
+Ventas: Falta ver puestos y enlace correcto de filtro de rutas (Falta hacerlo bonito)
+Despachos y demás falta todo
+
+Para este fin de semana debe estar hecho la ventana de ventas.
+
+Resumen del dia: Se arregló problema de visualizacion de puestos, ahora se muestran todos los puestos correctamente
+La meta de mañana es arreglar tema rutas y añadir ventana de ver tiquetes.
+
+
+18/10/2019 /////////////////////////////////////////
+
+Analizando como se usa el sistema en la parte de ventas, hay dos opciones
+Si no hay nada seleccionado de destino, la tabla trae todas las lineas, si selecciona una linea la lista de destinos finales se actualiza con todos los posibles destinos que cubra esa ruta, se selecciona un destino final, junto a los puestos y demas informacion y se vende o se limpia toda la informacion.
+
+Si se selecciona un destino, la tabla se filtra (FALTA VER SI SE FILTRA CON UNA CONSULTA O SE FILTRA EN EL FRONT) para mostrar solo las rutas que sirven, cuando se selecciona una linea, el destino final será el destino previamente seleccionado, sin embargo este se podrá cambiar, se rellenan los demas datos y se vende o se limpia toda la información.
+
+Dos opciones para el filtrado:
+1. Se filtra con la base de datos: Una vez se obtienen todos los destinos posibles que sirven para el destino seleccionado mediante una consulta a Firebase, se hace una peticion al backend que consulta la DB SQL, la cual consulta todas las lineas que tienen como destino alguno entre los que sirven.
+
+2. Se filtra en el front: Una vez se obtienen todos los destinos posibles que sirven para el destino seleccionado mediante una consulta a Firebase, se ejecuta un filtro en la tabla por columna destino, que solo muestre las lineas cuales destinos sirven para el destino seleccionado. (OPCION QUE HARÉ)
+
+Antes del filtrado voy a hacer toda la base de datos de firebase e integrar los datos correctamente con sus respectivos ids.
+Proxima tarea, terminar la base de datos almenos de las rutas y poblar con datos mas congruentes, mirar lo de localStorage.
+ 

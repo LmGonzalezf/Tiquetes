@@ -1,0 +1,244 @@
+{
+  "Pacho":{
+    "Bogotá":{
+      "Zipa":{
+        "valor":11000
+      },
+      "Cajicá":{
+        "valor":13000
+      },
+      "Chía":{
+        "valor":14000
+      },
+      "Bogotá":{
+        "valor":15000
+      }
+    },
+    "Tudela":{
+      "Bermejal":{
+        "valor":6000
+      },
+      "Buena Vista":{
+        "valor":7000
+      },
+      "El Pino":{
+        "valor":8000
+      },
+      "Campamento":{
+        "valor":11000
+      },
+      "Villa Gomez":{
+        "valor":12000
+      },
+      "Mencipa":{
+        "valor":15000
+      },
+      "Alto Tabla":{
+        "valor":16000
+      },
+      "Cuatro Caminos":{
+        "valor":17000
+      },
+      "Capira":{
+        "valor":19000
+      },
+      "Tudela":{
+        "valor":22000
+      },
+      "Paime":{
+        "valor":22000
+      },
+      "La Montaña":{
+        "valor":22000
+      },
+      "Cuibuco":{
+        "valor":24000
+      }
+    },
+    "Yacopi":{
+      "Guanacas":{
+        "valor":10000
+      },
+      "Talauta":{
+        "valor":11000
+      },
+      "Charco Largo":{
+        "valor":12000
+      },
+      "Hermosa":{
+        "valor":13000
+      },
+      "Hinche":{
+        "valor":14000
+      },
+      "Curua":{
+        "valor":16000
+      },
+      "Murca":{
+        "valor":17000
+      },
+      "La Palma":{
+        "valor":18000
+      },
+      "Cañada":{
+        "valor":19000
+      },
+      "La Guada":{
+        "valor":19000
+      },
+      "El Cerro":{
+        "valor":20000
+      },
+      "Puente Tierra":{
+        "valor":20000
+      },
+      "Corinto":{
+        "valor":21000
+      },
+      "Yacopi":{
+        "valor":22000
+      }
+    },
+    "Naranjal":{
+      "Guanacas":{
+        "valor":10000
+      },
+      "El Peñon":{
+        "valor":12000
+      },
+      "Palacios":{
+        "valor":14000
+      },
+      "Bunque":{
+        "valor":16000
+      },
+      "Chamuscados":{
+        "valor":19000
+      },
+      "Topaipi":{
+        "valor":21000
+      },
+      "Sabaneta":{
+        "valor":23000
+      },
+      "Papatas":{
+        "valor":24000
+      },
+      "Naranjal":{
+        "valor":25000
+      }
+    },
+    "Guayabal":{
+      "Guanacas":{
+        "valor":10000
+      },
+      "El Peñon":{
+        "valor":12000
+      },
+      "Salinas":{
+        "valor":15000
+      },
+      "Curiche":{
+        "valor":16000
+      },
+      "Guayabal":{
+        "valor":21000
+      }
+    },
+    "Guacamayas":{
+      "Algodonales":{
+        "valor":5000
+      },
+      "Mortiño":{
+        "valor":7000
+      },
+      "Limoncitos":{
+        "valor":8000
+      },
+      "Jardin":{
+        "valor":9000
+      },
+      "Cerinza":{
+        "valor":11000
+      },
+      "Guacamayas":{
+        "valor":12000
+      }
+    },
+    "San Antonio":{
+      "Santa Ines":{
+        "valor":6000
+      },
+      "Guayabas":{
+        "valor":7000
+      },
+      "El Cedro":{
+        "valor":8000
+      },
+      "San Jeronimo":{
+        "valor":9000
+      },
+      "San Jose":{
+        "valor":10000
+      },
+      "Pasuncha":{
+        "valor":11000
+      },
+      "Yasal":{
+        "valor":14000
+      },
+      "Mata de Ramo":{
+        "valor":18000
+      },
+      "San Antonio":{
+        "valor":21000
+      }
+    },
+    "Caparrapi":{
+      "Guanacas":{
+        "valor":10000
+      },
+      "Talauta":{
+        "valor":11000
+      },
+      "Charco Largo":{
+        "valor":12000
+      },
+      "Hermosa":{
+        "valor":13000
+      },
+      "Hinche":{
+        "valor":14000
+      },
+      "Curua":{
+        "valor":16000
+      },
+      "Murca":{
+        "valor":17000
+      },
+      "La Palma":{
+        "valor":18000
+      },
+      "Caparrapi":{
+        "valor":22000
+      },
+      "Puerto Salgar":33000
+    }
+  },
+  "Bogotá":{
+    "Pacho":{
+      "Zipa":{
+        "valor":6000
+      },
+      "Cajicá":{
+        "valor":5000
+      },
+      "Chía":{
+        "valor":4000
+      },
+      "Pacho":{
+        "valor":15000
+      }
+    }
+  }
+}

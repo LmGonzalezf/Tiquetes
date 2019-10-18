@@ -12,8 +12,8 @@
   }
 }
 #tableLineas {
-	margin: 4% ;
-	width: 80%;
+	margin-left: 0% ;
+	width: 100%;
 	
 	.input-group-text {
 		padding: 0 .5em 0 .5em;
@@ -43,6 +43,7 @@
 .containerGigante{
   margin-top: 4%;
   margin-bottom: 5%;
+  max-width: 99%;
 }
 .nav-tabs .nav-link.active {
   background-color: rgb(90, 209, 34);
@@ -54,18 +55,54 @@
 .labelTiquetes{
   margin-left: 4%;
   margin-top: 3%;
+  max-width: 100%;
 }
-
+.colValor{
+  padding-left: 0%;
+}
+.subValor{
+  margin-top:10%;
+}
+.btnVenta{
+  margin-top: 15%;
+}
+.valorTiquete{
+  display: table;
+  overflow: hidden;
+  margin-left: 8%;
+  max-width: 100%;
+  height: 100%;
+  text-align: left;
+  vertical-align: middle;
+  
+}
+.containervalorTiquete{
+  align-items:stretch;
+  }
 #valorTotal  {
   margin-top: 4%;
 }
 .containerTabla{
-  margin-left: 3%;
+  margin-left: 1%;
   border-style: solid;
   border-width: 1px;
   border-color: rgba(0, 0, 0, 0.37);
   border-radius: 10px;
-  max-width: 80%;
+  max-width: 100%;
+  margin-top: 1%;
+  margin-bottom: 3%;
+}
+
+.containerPuestos{
+  margin-top: 10%;
+  background-image: url('~@/assets/Bus.png');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  width: 80%;
+  height: 100%;
+}
+.containerNumPuestos{
+  padding-top: 220px;
 }
 .inputTiquete {
   margin-top: 3%;
@@ -76,6 +113,7 @@
 }
 
 .tablalineas{
+
     border-collapse: collapse;
 }
 
@@ -83,15 +121,15 @@
   margin-bottom: 5%;
 }
 .containerformV{
-  max-width: 80%;
+  max-width: 100%;
   padding-top: 2%;
   align-items: stretch;
   border-style: solid;
-  border-width: 1px;
+  border-width: 0px;
   border-color: rgba(0, 0, 0, 0.37);
   border-radius: 10px;
-  margin-left: 4%;
-  margin-top: 3%;
+  margin-left: -1%;
+  margin-top: 8%;
   
 }
 .wrapper-box__title {
@@ -189,6 +227,7 @@
   &:hover {
     background-color: $button-hover-bg;
   }
+  
 }
 
 .bullet-pass-hor {

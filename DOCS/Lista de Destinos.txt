@@ -1,0 +1,70 @@
+1 Bogota
+2 Cajica
+3 Chia
+4 Pacho
+5 Bermejal
+6 Buena Vista
+7 El Pino
+8 Campamento
+9 Villagomez
+10 Mencipa
+11 Alto Tabla
+12 Cuatro Caminos
+13 Capira
+14 Tudela
+15 Paime
+16 La Montaña
+17 Cuibuco
+18 Guanacas
+19 Talauta
+20 Charco Largo
+21 Hermosa
+22 Hinche
+23 Curua
+24 Murca
+25 La Palma
+26 Cañada
+27 La Guada
+28 El Cerro
+29 Puente Tierra
+30 Corinto
+31 Yacopi
+32 El Peñon
+33 Palacios
+34 Bunque
+35 Chamuscados
+36 Topaipi
+37 Sabaneta
+38 Papatas
+39 Naranjal
+40 Salinas
+41 Curiche
+42 Guayabal
+43 Algodonales
+44 Mortiño
+45 Limoncitos
+46 Jardin
+47 Cerinza
+48 Guacamayas
+49 Santa Ines
+50 Guayabas
+51 El Cedro
+52 San Jeronimo
+53 San José
+54 Pasuncha
+55 Yasal
+56 Mata de Ramo
+57 San Antonio
+58 Caparrapi
+59 Puerto Salgar
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
