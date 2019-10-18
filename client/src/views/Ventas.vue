@@ -122,11 +122,13 @@
                 </b-col>
                 <b-col sm="4" cols="4">
                     <b-container class="containerPuestos" v-bind:style="{visibility:computedVisibility}">
+                    <div class="divPuestos">
                     <b-container class="containerNumPuestos">
                     <p :key="item" v-for='item in arrayPuestos'>
-                        <b-button
+                        <b-row align-h="between" >
+                        <b-col class="colpuestos"  v-for="(btn, idx) in item" :key="idx">
+                            <b-button
                             class="btnPuesto"
-                            v-for="(btn, idx) in item"
                             :key="idx"
                             :disabled = "btn.able"
                             :pressed.sync="btn.state"
@@ -137,8 +139,12 @@
                         >
                         {{ btn.caption }}
                         </b-button> 
+                        </b-col>
+                        
+                        </b-row>
                     </p>
                     </b-container>
+                    </div>
                     </b-container>
                           
                 </b-col> <!-- Columna grande puestos (derecha) -->
@@ -241,8 +247,6 @@
             }
             this.arrayPuestos.push(arreglosPequeños) 
         }
-        console.log(Math.ceil(self.puestosCarro/4))
-        console.log(this.arrayPuestos)
       },
         actualizarTabla: async function (){
             this.isBusy = true;

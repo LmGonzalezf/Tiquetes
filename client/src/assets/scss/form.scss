@@ -24,7 +24,7 @@
 	}
 }
 .btnPuesto {
-  margin-left: 15px;
+  width: 70%;
   background-color: rgb(43, 194, 56);
 }
 .btnPuesto:disabled{
@@ -92,7 +92,6 @@
   margin-top: 1%;
   margin-bottom: 3%;
 }
-
 .containerPuestos{
   margin-top: 10%;
   background-image: url('~@/assets/Bus.png');
@@ -101,8 +100,14 @@
   width: 80%;
   height: 100%;
 }
+.colpuestos{
+  padding: 0%;
+  max-width: 100%;
+}
 .containerNumPuestos{
   padding-top: 220px;
+  width: 75%;
+  margin: 0 auto;
 }
 .inputTiquete {
   margin-top: 3%;

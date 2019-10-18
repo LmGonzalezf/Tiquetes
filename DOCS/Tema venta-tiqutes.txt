@@ -90,4 +90,10 @@ Dos opciones para el filtrado:
 
 Antes del filtrado voy a hacer toda la base de datos de firebase e integrar los datos correctamente con sus respectivos ids.
 Proxima tarea, terminar la base de datos almenos de las rutas y poblar con datos mas congruentes, mirar lo de localStorage.
+
+Resumen de hoy, se corrigieron errores, se añadió imagen de bus y diagrama de puestos, se terminó el formulario de ventas (falta conectarlo con el backend, se organizó un poco todo el layout
+
+Surgió otra idea: Tener en el diagrama de buses un popup con ayuda acerca de como se acomodan los puestos en los diferentes tipos de buseta
+
+19/10/2019//////////////////////////////////////////////
  
